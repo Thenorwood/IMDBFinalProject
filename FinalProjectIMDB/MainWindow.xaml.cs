@@ -11,6 +11,9 @@ using System.Windows.Shapes;
 
 namespace FinalProjectIMDB;
 
+
+//scafflold>>> Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=IMDB;Trusted_Connection=True;" System.Data.SqlClient -OutputDir Models -Tables Titles,Genres,Directors -Force
+
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
