@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using FinalProjectIMDB.Models;
+using FinalProjectIMDB.ViewModels;
 
 namespace FinalProjectIMDB.Views
 {
-    /// <summary>
-    /// Interaction logic for TitlesPage.xaml
-    /// </summary>
     public partial class TitlesPage : Page
     {
         public TitlesPage()
         {
             InitializeComponent();
+            DataContext = new TitlesPageViewModel();
+        }
+
+        private void ViewDetails_Click(object sender, RoutedEventArgs e)
+        {
+            // Get the clicked movie
+            var title = (sender as Button).DataContext as Title;
+
+            // Show a simple message box with movie details
+            MessageBox.Show($"Title: {title.PrimaryTitle}\nYear: {title.StartYear}\nRuntime: {title.RuntimeMinutes} min",
+                           "Movie Details",
+                           MessageBoxButton.OK);
         }
     }
 }
