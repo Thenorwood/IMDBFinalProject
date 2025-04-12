@@ -101,20 +101,5 @@
         </Style.Triggers>
     </Style>
 
-    <ImageBrush x:Key="TextureBackground" ImageSource="/Assets/red-texture.png" Stretch="UniformToFill" />
-
-    <Style x:Key="BorderWithTextureBackgroundStyle" TargetType="Border">
-        <Setter Property="Background">
-            <Setter.Value>
-                <ImageBrush ImageSource="/Assets/red-texture.png" Stretch="UniformToFill" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="CornerRadius" Value="5" />
-        <Setter Property="Padding" Value="5" />
-
-    </Style>
-
 
 </ResourceDictionary>

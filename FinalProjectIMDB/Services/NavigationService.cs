@@ -19,11 +19,12 @@ namespace FinalProjectIMDB.Services
         private readonly Stack<object> _navigationStack = new Stack<object>();
         private MainViewModel _mainViewModel;
 
-        public NavigationService(IServiceProvider serviceProvider)
+        public NavigationService(IServiceProvider serviceProvider, MainViewModel mainViewModel)
         {
             _serviceProvider = serviceProvider;
+            _mainViewModel = mainViewModel;
         }
-
+         
         public void SetMainViewModel(MainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;

@@ -29,7 +29,7 @@
 
             </Menu>
         </Border>
-        <Border Style="{StaticResource BorderWithTextureBackgroundStyle}">
+        <Border Style="{StaticResource sectionBorderStyle}">
             <Grid>
                 <StackPanel Height="100" Orientation="Horizontal">
                     <Image Source="{StaticResource MovieIcon}" Style="{StaticResource logoImageStyle}" />
