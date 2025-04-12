@@ -4,9 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalProjectIMDB"
+        xmlns:vm="clr-namespace:FinalProjectIMDB.ViewModels"
+        xmlns:views="clr-namespace:FinalProjectIMDB.Views"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
-        Title="IMDB Explorer" Height="600" Width="900">
-    <Grid>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
-    </Grid>
+        Title="IMDB Explorer" Height="900" Width="1200" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Background="Transparent">
+
+    <Window.Resources>
+        <ImageBrush x:Key="PlasticBrush" ImageSource="/Assets/plastic-texture.png" Stretch="UniformToFill" Opacity="0.9" />
+    </Window.Resources>
+
+    <StackPanel MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+        <Border Background="{StaticResource PlasticBrush}" CornerRadius="40" BorderThickness="2" Padding="20" BorderBrush="Black" Height="900" Width="1200">
+            <Menu Background="Black" Foreground="Yellow" FontFamily="Cooper Black" FontSize="16">
+                <MenuItem Header="File">
+                    <MenuItem Header="Exit" Click="Exit_Click"/>
+                </MenuItem>
+                <MenuItem Header="Pages">
+                    <MenuItem Header="Home" Command="{Binding NavigateToHomePageCommand}"/>
+                    <MenuItem Header="Directors" Command="{Binding NavigateToDirectorsPageCommand}"/>
+                    <MenuItem Header="Genres" Command="{Binding NavigateToGenresPageCommand}"/>
+                    <MenuItem Header="Titles" Command="{Binding NavigateToTitlesPageCommand}"/>
+                </MenuItem>
+
+            </Menu>
+        </Border>
+        <Border Style="{StaticResource BorderWithTextureBackgroundStyle}">
+            <Grid>
+                <StackPanel Height="100" Orientation="Horizontal">
+                    <Image Source="{StaticResource MovieIcon}" Style="{StaticResource logoImageStyle}" />
+                    <TextBlock Text="IMDB Explorer" VerticalAlignment="Center" FontFamily="Agency FB" FontSize="48" Foreground="White"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </StackPanel>
 </Window>

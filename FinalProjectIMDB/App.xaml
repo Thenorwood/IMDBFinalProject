@@ -1,9 +1,33 @@
 ﻿<Application x:Class="FinalProjectIMDB.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:FinalProjectIMDB"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:local="clr-namespace:FinalProjectIMDB"
+            xmlns:vm="clr-namespace:FinalProjectIMDB.ViewModels"
+            xmlns:views="clr-namespace:FinalProjectIMDB.Views"
+            Startup="Application_Startup" >
+    
+    
+   <Application.Resources>
+       <ResourceDictionary>
+           <ResourceDictionary.MergedDictionaries>
+               <ResourceDictionary Source="styles/Styles.xaml"/>
+           </ResourceDictionary.MergedDictionaries>
+
+           <BitmapImage x:Key="Texture" UriSource="/Assets/plastic-texture.png" />
+           <BitmapImage x:Key="MovieIcon" UriSource="/Assets/movie-icon.png" />
+
+           <DataTemplate DataType="{x:Type vm:HomePageViewModel}">
+               <views:HomePage />
+           </DataTemplate>
+           <DataTemplate DataType="{x:Type vm:DirectorsPageViewModel}">
+               <views:DirectorsPage />
+           </DataTemplate>
+           <DataTemplate DataType="{x:Type vm:GenresPageViewModel}">
+               <views:GenresPage />
+           </DataTemplate>
+           <DataTemplate DataType="{x:Type vm:TitlesPageViewModel}">
+               <views:TitlesPage />
+           </DataTemplate>
+       </ResourceDictionary>
+   </Application.Resources>
 </Application>

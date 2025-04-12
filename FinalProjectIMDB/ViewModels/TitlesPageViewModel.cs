@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using System.Windows.Input;
 using FinalProjectIMDB.Models;
+using FinalProjectIMDB.Data;
 
 namespace FinalProjectIMDB.ViewModels
 {

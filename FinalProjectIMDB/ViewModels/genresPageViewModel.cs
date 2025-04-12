@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using FinalProjectIMDB.Models;
+using FinalProjectIMDB.Data;
 
 namespace FinalProjectIMDB.ViewModels
 {
