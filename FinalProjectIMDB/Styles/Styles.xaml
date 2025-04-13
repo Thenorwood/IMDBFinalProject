@@ -3,7 +3,7 @@
 
 
     <Style x:Key="sectionBorderStyle" TargetType="Border">
-        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderBrush" Value="AliceBlue"/>
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="Padding" Value="5" />
@@ -17,7 +17,7 @@
     </Style>
 
     <Style x:Key="ImageButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="DarkOrange" />
+        <Setter Property="Background" Value="Yellow" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="Transparent" />
         <Setter Property="FontSize" Value="14" />
@@ -43,23 +43,23 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Effect">
             <Setter.Value>
-                <DropShadowEffect ShadowDepth="2" Color="Black" Opacity="0.5" />
+                <DropShadowEffect ShadowDepth="2" Color="Purple" Opacity="0.5" />
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Orange" />
+                <Setter Property="Background" Value="Purple" />
                 <Setter Property="Foreground" Value="White" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="DarkOrange" />
+                <Setter Property="Background" Value="Yellow" />
                 <Setter Property="Foreground" Value="White" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <Style x:Key="SmallImageButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="DarkOrange" />
+        <Setter Property="Background" Value="MediumPurple" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Foreground" Value="Transparent" />
         <Setter Property="FontSize" Value="14" />
@@ -99,6 +99,20 @@
                 <Setter Property="Foreground" Value="White" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="BorderWithTextureBackgroundStyle" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="/Assets/crt-bg.png" Stretch="UniformToFill" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="5" />
+
     </Style>
 
 

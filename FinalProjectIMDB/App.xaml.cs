@@ -28,6 +28,7 @@ public partial class App : Application
 
         var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
         var navigationService = ServiceProvider.GetRequiredService<INavigationService>() as NavigationService;
+        navigationService.SetMainViewModel(mainViewModel);
 
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
@@ -39,10 +40,10 @@ public partial class App : Application
         services.AddSingleton<MainWindow>();
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
-        services.AddTransient<HomePageViewModel>();
-        services.AddTransient<DirectorsPageViewModel>();
-        services.AddTransient<GenresPageViewModel>();
-        services.AddTransient<TitlesPageViewModel>();
+        services.AddSingleton<HomePageViewModel>();
+        services.AddSingleton<DirectorsPageViewModel>();
+        services.AddSingleton<GenresPageViewModel>();
+        services.AddSingleton<TitlesPageViewModel>();
 
         services.AddDbContext<ImdbContext>(options =>
             options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=IMDB;Trusted_Connection=True;"));

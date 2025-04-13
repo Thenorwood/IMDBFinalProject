@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\crt-bg.png" />
     <Resource Include="Assets\movie-icon.png" />
     <Resource Include="Assets\plastic-texture.png" />
   </ItemGroup>
