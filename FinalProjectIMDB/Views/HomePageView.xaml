@@ -87,10 +87,16 @@
         
         <!-- VHS Commercial Img-->
         <Border Width="500" Height="300" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image Source="/Assets/commercial-img-beavis.png" Stretch="UniformToFill" Margin="26,94,26,-22">
+            <Image Source="/Assets/commercial-img-beavis.png" Stretch="UniformToFill" Margin="63,88,65,-68">
                 <Image.Effect>
-                    <DropShadowEffect Color="Black" ShadowDepth="10" BlurRadius="20"/>
+                    <BlurEffect Radius="2" KernelType="Gaussian"/>
                 </Image.Effect>
+                <Image.OpacityMask>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FF000000" Offset="0.9"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </RadialGradientBrush>
+                </Image.OpacityMask>
             </Image>
         </Border>
 
@@ -102,10 +108,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Margin="0,0,20,20">
-            <TextBlock Text="CALL NOW! 1-800-CASH-PLS" 
+            <TextBlock Text="CALL NOW!" 
                        Foreground="White" 
                        FontWeight="Bold"
-                       FontFamily="Arial Black" Height="11" Width="187"/>
+                       FontFamily="Arial Black" Height="11" Width="auto"/>
         </Border>
         
         
