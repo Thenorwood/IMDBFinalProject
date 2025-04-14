@@ -8,10 +8,65 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-
     <UserControl.DataContext>
         <vm:GenresPageViewModel/>
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <!-- Star shape -->
+        <PathGeometry x:Key="StarGeometry" Figures="M 10,0 L 12,6 L 18,6 L 13,10 L 15,16 L 10,12 L 5,16 L 7,10 L 2,6 L 8,6 Z"/>
+
+        <!-- One blur effect to rule them all -->
+        <BlurEffect x:Key="VhsBlur" Radius="2.5" KernelType="Gaussian"/>
+
+        <!-- Genre Button Style -->
+        <Style x:Key="GenreButtonStyle" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="Navy" Offset="0"/>
+                        <GradientStop Color="Purple" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="Gold"/>
+            <Setter Property="BorderBrush" Value="Yellow"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Cooper Black"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Purple" BlurRadius="10" ShadowDepth="3" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Purple"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="Gold"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="DarkBlue"/>
+                    <Setter Property="Foreground" Value="Yellow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
     <UserControl.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -26,38 +81,113 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-
-        <Grid>
-            <StackPanel VerticalAlignment="Top">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Border Style="{StaticResource sectionBorderStyle}">
-                        <StackPanel>
-                            <Border Background="DarkBlue" Style="{StaticResource sectionBorderStyle}">
-                                <TextBlock Text="Genres" Foreground="Yellow" HorizontalAlignment="Center" FontSize="54" FontWeight="Bold" FontFamily="Cooper Black"/>
-
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <TextBlock Text="Explore the best film genres!"/>
-                    <TextBlock Text="Call Now! Order Today! No Money Down!"/>
-                </StackPanel>
+        <!-- Header -->
+        <Border Grid.Row="0" Background="DarkBlue" Padding="20" BorderBrush="Yellow" BorderThickness="0,0,0,3">
+            <StackPanel>
+                <TextBlock Text="GENRES GALORE!" 
+                          FontSize="42" 
+                          FontWeight="Bold" 
+                          Foreground="Gold"
+                          FontFamily="Cooper Black"
+                          HorizontalAlignment="Center"
+>
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="3" Color="Purple" BlurRadius="2"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                <TextBlock Text="The Ultimate Film Collection" 
+                          FontSize="20" 
+                          Foreground="Yellow"
+                          FontFamily="Arial Black"
+                          HorizontalAlignment="Center"
+                          Margin="0,10,0,0">
+                    <TextBlock.Effect>
+                        <BlurEffect Radius="2"/>
+                    </TextBlock.Effect>
+                </TextBlock>
             </StackPanel>
-        </Grid>
+        </Border>
 
+        <!-- Genres List -->
+        <ScrollViewer Grid.Row="1" Margin="30" VerticalScrollBarVisibility="Auto">
+            <WrapPanel HorizontalAlignment="Center">
+               
+                <Button Content="ACTION BLOCKBUSTERS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="ROMANTIC GEMS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="HORROR SPECIALS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="COMEDY CLASSICS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="SCI-FI SPECTACLES" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="DRAMA DEALS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="THRILLER THURSDAYS" Style="{StaticResource GenreButtonStyle}"/>
+                <Button Content="ANIMATED AWESOME" Style="{StaticResource GenreButtonStyle}"/>
+            </WrapPanel>
+        </ScrollViewer>
 
-        <!-- VHS distortion overlay (applies to entire control) -->
-        <Rectangle Opacity="0.15">
+        <!-- "As Seen On TV" Badge -->
+        <Border Style="{StaticResource AsSeenOnTvBadgeStyle}" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top"
+                Margin="0,39,19,0" Height="43" Width="133">
+            <TextBlock Style="{StaticResource AsSeenOnTvTextStyle}"/>
+        </Border>
+
+        <!-- Sparkles -->
+        <Canvas Grid.RowSpan="2">
+            <!-- Top Left Sparkle -->
+            <Path Data="{StaticResource StarGeometry}" Effect="{StaticResource VhsBlur}" Fill="Yellow" Width="20" Height="20" 
+                  Canvas.Left="50" Canvas.Top="50" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <RotateTransform Angle="-15"/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+                <Path.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.5"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.2"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0.5"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.5"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.2"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0.5"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Path.Triggers>
+            </Path>
+        </Canvas>
+
+        <!-- Sticker -->
+        <Border Background="Red" 
+                BorderBrush="White" 
+                BorderThickness="2"
+                CornerRadius="10"
+                Padding="10,5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Margin="34,0,0,29">
+            <TextBlock Text="2 VHS for 3.99!" 
+                       Foreground="White" 
+                       FontWeight="Bold"
+                       FontFamily="Arial Black"
+                       Effect="{StaticResource VhsBlur}"/>
+        </Border>
+
+        <!-- VHS distortion overlay -->
+        <Rectangle Grid.RowSpan="2" Opacity="0.15">
             <Rectangle.Fill>
                 <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
                     <VisualBrush.Visual>
                         <Canvas>
-                            <!-- VHS scanline effect -->
                             <Rectangle Width="50" Height="50" Fill="Black"/>
                             <Line X1="0" Y1="0" X2="50" Y2="50" Stroke="White" StrokeThickness="0.2"/>
                             <Line X1="50" Y1="0" X2="0" Y2="50" Stroke="White" StrokeThickness="0.2"/>
-                            <!-- Noise pattern -->
                             <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="10" Canvas.Top="15"/>
                             <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="30" Canvas.Top="25"/>
                         </Canvas>

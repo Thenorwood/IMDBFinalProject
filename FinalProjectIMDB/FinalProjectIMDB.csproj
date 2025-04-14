@@ -14,13 +14,14 @@
     <None Remove="Assets\commercial-img-wonka.png" />
     <None Remove="Assets\movie-icon.png" />
     <None Remove="Assets\plastic-texture.png" />
+    <None Remove="Assets\scotch-ad.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.3">
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -33,6 +34,7 @@
     <Resource Include="Assets\crt-bg.png" />
     <Resource Include="Assets\movie-icon.png" />
     <Resource Include="Assets\plastic-texture.png" />
+    <Resource Include="Assets\scotch-ad.png" />
   </ItemGroup>
 
 </Project>

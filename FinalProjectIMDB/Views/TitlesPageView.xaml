@@ -8,9 +8,45 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.DataContext>
-        <vm:TitlesPageViewModel />
-    </UserControl.DataContext>
+    <UserControl.Resources>
+        <!-- Subtle blur for text elements -->
+        <BlurEffect x:Key="TextBlur" Radius="1.2" KernelType="Gaussian"/>
+
+        <!-- Style for infomercial buttons -->
+        <Style x:Key="InfomercialButton" TargetType="Button">
+            <Setter Property="Background" Value="#FF6C00"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Arial Black"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="5" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- DataGrid style with subtle VHS influence -->
+        <Style x:Key="VhsDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="#1A1A3D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Purple"/>
+            <Setter Property="RowBackground" Value="#2A2A5D"/>
+            <Setter Property="AlternatingRowBackground" Value="#1E1E42"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="VhsColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#3A3A7D"/>
+            <Setter Property="Foreground" Value="Gold"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="Yellow"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+        </Style>
+    </UserControl.Resources>
 
     <UserControl.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -18,7 +54,6 @@
             <GradientStop Color="Purple" Offset="1"/>
         </LinearGradientBrush>
     </UserControl.Background>
-
 
     <Grid>
         <Grid.RowDefinitions>
@@ -28,24 +63,26 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Style="{StaticResource sectionBorderStyle}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Border Style="{StaticResource sectionBorderStyle}">
-                    <StackPanel>
-                        <Border Background="DarkBlue" Style="{StaticResource sectionBorderStyle}">
-                            <TextBlock Text="Films" Foreground="Yellow" HorizontalAlignment="Center" FontSize="54" FontWeight="Bold" FontFamily="Cooper Black"/>
-
-                        </Border>
-                    </StackPanel>
-                </Border>
-
-                <TextBlock Text="Welcome to IMDB Explorer"/>
-                <TextBlock Text="Call Now! Order Today! No Money Down!"/>
+        <Border Grid.Row="0" Background="DarkBlue" Padding="20" BorderBrush="Yellow" BorderThickness="0,0,0,3">
+            <StackPanel>
+                <TextBlock Text="FILM COLLECTION" 
+                          FontSize="36" 
+                          FontWeight="Bold" 
+                          Foreground="Gold"
+                          FontFamily="Cooper Black"
+                          HorizontalAlignment="Center"
+                          Effect="{StaticResource TextBlur}"/>
+                <TextBlock Text="Browse our exclusive movie selection!" 
+                          FontSize="18" 
+                          Foreground="Yellow"
+                          FontFamily="Arial Black"
+                          HorizontalAlignment="Center"
+                          Margin="0,10,0,0"/>
             </StackPanel>
         </Border>
 
         <!-- Filter Section -->
-        <Border Grid.Row="1" Background="#F8F9FA" Padding="20,15" BorderBrush="#DEE2E6" BorderThickness="0,0,0,1">
+        <Border Grid.Row="1" Background="#2A2A5D" Padding="20,15" BorderBrush="#4A4A8D" BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -66,110 +103,102 @@
 
                     <!-- Filter Title -->
                     <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" 
-                           Text="Filter Options" 
+                           Text="FILTER OPTIONS" 
                            FontSize="16" 
-                           FontWeight="SemiBold" 
+                           FontWeight="Bold" 
+                           Foreground="Gold"
+                           FontFamily="Arial Black"
                            Margin="0,0,0,10"/>
 
                     <!-- Search Box -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Search" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding SearchText}" Padding="5"/>
+                        <TextBlock Text="Search" Margin="0,0,0,5" Foreground="White"/>
+                        <TextBox Text="{Binding SearchText}" Padding="5" Background="#3A3A7D" Foreground="White"/>
                     </StackPanel>
 
                     <!-- Genre Filter -->
                     <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,10,0">
-                        <TextBlock Text="Genre" Margin="0,0,0,5"/>
+                        <TextBlock Text="Genre" Margin="0,0,0,5" Foreground="White"/>
                         <ComboBox ItemsSource="{Binding Genres}" 
                               SelectedValuePath="GenreId" 
                               DisplayMemberPath="Name"
                               SelectedValue="{Binding SelectedGenreId}" 
-                              Padding="5"/>
+                              Padding="5"
+                              Background="#3A3A7D"
+                              Foreground="White"/>
                     </StackPanel>
 
-                    <!-- Year Range Filters -->
+                    
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,10,0">
-                        <TextBlock Text="Start Year" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding StartYearFilter}" Padding="5"/>
+                        <TextBlock Text="Start Year" Margin="0,0,0,5" Foreground="White"/>
+                        <TextBox Text="{Binding StartYearFilter}" Padding="5" Background="#3A3A7D" Foreground="White"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Grid.Column="3">
-                        <TextBlock Text="End Year" Margin="0,0,0,5"/>
-                        <TextBox Text="{Binding EndYearFilter}" Padding="5"/>
+                        <TextBlock Text="End Year" Margin="0,0,0,5" Foreground="White"/>
+                        <TextBox Text="{Binding EndYearFilter}" Padding="5" Background="#3A3A7D" Foreground="White"/>
                     </StackPanel>
                 </Grid>
 
                 <!-- Filter Buttons -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <Button Content="Reset" 
+                    <Button Content="RESET" 
                         Command="{Binding ResetFiltersCommand}"
-                        Margin="10,0,5,0"
-                        Padding="10,5"
+                        Style="{StaticResource InfomercialButton}"
                         Background="#6C757D"
-                        Foreground="White"
-                        BorderThickness="0" Click="Button_Click_1"/>
+                        Margin="10,0,5,0"/>
 
-                    <Button Content="Apply Filters" 
+                    <Button Content="APPLY FILTERS" 
                         Command="{Binding ApplyFiltersCommand}"
-                        Margin="5,0,0,0"
-                        Padding="10,5"
-                        Background="#0D6EFD"
-                        Foreground="White"
-                        BorderThickness="0" Click="Button_Click"/>
+                        Style="{StaticResource InfomercialButton}"
+                        Background="#FF6C00"
+                        Margin="5,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Movie List -->
-        <Grid Grid.Row="2">
-            <DataGrid ItemsSource="{Binding TitlesView}" 
-                  AutoGenerateColumns="False" 
-                  IsReadOnly="True"
-                  GridLinesVisibility="Horizontal"
-                  BorderThickness="0"
-                  RowBackground="White"
-                  AlternatingRowBackground="#F8F9FA">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Binding="{Binding PrimaryTitle}" Width="3*"/>
-                    <DataGridTextColumn Header="Original Title" Binding="{Binding OriginalTitle}" Width="3*"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding TitleType}" Width="*"/>
-                    <DataGridTextColumn Header="Year" Binding="{Binding StartYear}" Width="*"/>
-                    <DataGridTextColumn Header="Runtime (min)" Binding="{Binding RuntimeMinutes}" Width="*"/>
-                    <DataGridTemplateColumn Header="Details" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button 
-                                    Padding="5,2"
-                                    Background="#0D6EFD"
-                                    Foreground="White"
-                                    BorderThickness="0"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+        <!-- Movie List  -->
+        <DataGrid Grid.Row="2"
+              ItemsSource="{Binding TitlesView}" 
+              AutoGenerateColumns="False" 
+              IsReadOnly="True"
+              Style="{StaticResource VhsDataGrid}"
+              ColumnHeaderStyle="{StaticResource VhsColumnHeader}"
+              Margin="20">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="TITLE" Binding="{Binding PrimaryTitle}" Width="3*" Foreground="White"/>
+                <DataGridTextColumn Header="ORIGINAL TITLE" Binding="{Binding OriginalTitle}" Width="3*" Foreground="White"/>
+                <DataGridTextColumn Header="TYPE" Binding="{Binding TitleType}" Width="*" Foreground="White"/>
+                <DataGridTextColumn Header="YEAR" Binding="{Binding StartYear}" Width="*" Foreground="White"/>
+                <DataGridTextColumn Header="RUNTIME" Binding="{Binding RuntimeMinutes}" Width="*" Foreground="White"/>
+                <DataGridTemplateColumn Header="DETAILS" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="VIEW" 
+                                Style="{StaticResource InfomercialButton}"
+                                Background="#0D6EFD"
+                                Padding="5,2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
-
-        <!-- VHS distortion overlay (applies to entire control) -->
-        <Rectangle Opacity="0.15">
+        <!-- VHS distortion overlay -->
+        <Rectangle Grid.RowSpan="3" Opacity="0.1">
             <Rectangle.Fill>
                 <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
                     <VisualBrush.Visual>
                         <Canvas>
-                            <!-- VHS scanline effect -->
                             <Rectangle Width="50" Height="50" Fill="Black"/>
-                            <Line X1="0" Y1="0" X2="50" Y2="50" Stroke="White" StrokeThickness="0.2"/>
-                            <Line X1="50" Y1="0" X2="0" Y2="50" Stroke="White" StrokeThickness="0.2"/>
-                            <!-- Noise pattern -->
-                            <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="10" Canvas.Top="15"/>
-                            <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="30" Canvas.Top="25"/>
+                            <Line X1="0" Y1="0" X2="50" Y2="50" Stroke="White" StrokeThickness="0.1"/>
+                            <Line X1="50" Y1="0" X2="0" Y2="50" Stroke="White" StrokeThickness="0.1"/>
                         </Canvas>
                     </VisualBrush.Visual>
                 </VisualBrush>
             </Rectangle.Fill>
             <Rectangle.Effect>
-                <BlurEffect Radius="1.5"/>
+                <BlurEffect Radius="1"/>
             </Rectangle.Effect>
         </Rectangle>
     </Grid>
