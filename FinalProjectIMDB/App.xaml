@@ -20,13 +20,13 @@
                <views:HomePageView />
            </DataTemplate>
            <DataTemplate DataType="{x:Type vm:DirectorsPageViewModel}">
-               <views:DirectorsPage />
+               <views:DirectorsPageView />
            </DataTemplate>
            <DataTemplate DataType="{x:Type vm:GenresPageViewModel}">
-               <views:GenresPage />
+               <views:GenresPageView />
            </DataTemplate>
            <DataTemplate DataType="{x:Type vm:TitlesPageViewModel}">
-               <views:TitlesPage />
+               <views:TitlesPageView />
            </DataTemplate>
        </ResourceDictionary>
    </Application.Resources>
