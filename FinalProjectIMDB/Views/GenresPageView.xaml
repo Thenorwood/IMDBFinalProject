@@ -45,5 +45,28 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
+
+
+        <!-- VHS distortion overlay (applies to entire control) -->
+        <Rectangle Opacity="0.15">
+            <Rectangle.Fill>
+                <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Canvas>
+                            <!-- VHS scanline effect -->
+                            <Rectangle Width="50" Height="50" Fill="Black"/>
+                            <Line X1="0" Y1="0" X2="50" Y2="50" Stroke="White" StrokeThickness="0.2"/>
+                            <Line X1="50" Y1="0" X2="0" Y2="50" Stroke="White" StrokeThickness="0.2"/>
+                            <!-- Noise pattern -->
+                            <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="10" Canvas.Top="15"/>
+                            <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="30" Canvas.Top="25"/>
+                        </Canvas>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Rectangle.Fill>
+            <Rectangle.Effect>
+                <BlurEffect Radius="1.5"/>
+            </Rectangle.Effect>
+        </Rectangle>
     </Grid>
 </UserControl>
