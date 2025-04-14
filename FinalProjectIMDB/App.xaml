@@ -17,7 +17,7 @@
            <BitmapImage x:Key="MovieIcon" UriSource="/Assets/movie-icon.png" />
 
            <DataTemplate DataType="{x:Type vm:HomePageViewModel}">
-               <views:HomePage />
+               <views:HomePageView />
            </DataTemplate>
            <DataTemplate DataType="{x:Type vm:DirectorsPageViewModel}">
                <views:DirectorsPage />
