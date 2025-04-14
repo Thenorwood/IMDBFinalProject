@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\commercial-img-beavis.png" />
+    <None Remove="Assets\commercial-img-rudolph.png" />
+    <None Remove="Assets\commercial-img-wonka.png" />
     <None Remove="Assets\movie-icon.png" />
     <None Remove="Assets\plastic-texture.png" />
   </ItemGroup>
@@ -24,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\commercial-img-beavis.png" />
+    <Resource Include="Assets\commercial-img-rudolph.png" />
+    <Resource Include="Assets\commercial-img-wonka.png" />
     <Resource Include="Assets\crt-bg.png" />
     <Resource Include="Assets\movie-icon.png" />
     <Resource Include="Assets\plastic-texture.png" />

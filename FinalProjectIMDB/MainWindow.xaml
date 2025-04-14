@@ -61,7 +61,7 @@
                             </ScrollViewer>
 
                             <Border Style="{StaticResource sectionBorderStyle}">
-                                <ToolBarTray Background="Transparent" Orientation="Vertical" Height="auto" Grid.Column="0">
+                                <ToolBarTray Background="Transparent" Orientation="Vertical" Height="auto" Grid.Column="0" Margin="0,0,-3,0">
                                     <ToolBar Background="Transparent" Height="330" Width="90" VerticalAlignment="Center">
 
                                         <Button Command="{Binding NavigateToHomePageCommand}" Style="{StaticResource ImageButtonStyle}" ToolTip="Go to Home Page">
@@ -87,15 +87,15 @@
                                 </ToolBarTray>
                             </Border>
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="1">
-                                <ContentControl Content="{Binding CurrentViewModel}" />
+                                <ContentControl Content="{Binding CurrentViewModel}" Height="442" Width="1008" />
                             </ScrollViewer>
                         </Grid>
-                        
+
                     </StackPanel>
-                        
+
                 </Border>
             </Border>
         </Border>
-        
+
     </StackPanel>
 </Window>
