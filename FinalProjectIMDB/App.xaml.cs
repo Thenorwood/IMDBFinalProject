@@ -60,7 +60,7 @@ public partial class App : Application
             var genresViewModel = ServiceProvider.GetRequiredService<GenresPageViewModel>();
             var titlesViewModel = ServiceProvider.GetRequiredService<TitlesPageViewModel>();
 
-            directorsViewModel.Directors = new ObservableCollection<Director>(dbContext.Directors.ToList());
+            directorsViewModel.FilteredDirectors = new ObservableCollection<Director>(dbContext.Directors.ToList());
             genresViewModel.Genres = new ObservableCollection<Genre>(dbContext.Genres.ToList());
             titlesViewModel.Titles = new ObservableCollection<Title>(dbContext.Titles.ToList());
         }

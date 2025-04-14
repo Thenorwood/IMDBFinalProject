@@ -121,7 +121,7 @@
 
         <!-- Directors List-->
         <DataGrid Grid.Row="1" 
-                  ItemsSource="{Binding Directors}" 
+                  ItemsSource="{Binding FilteredDirectors}" 
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   Margin="40,20,40,40"
