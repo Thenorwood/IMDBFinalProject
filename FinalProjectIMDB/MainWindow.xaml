@@ -4,9 +4,98 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalProjectIMDB"
+        xmlns:vm="clr-namespace:FinalProjectIMDB.ViewModels"
+        xmlns:views="clr-namespace:FinalProjectIMDB.Views"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="IMDB Explorer" Height="700" Width="1200" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize" Background="Transparent">
 
-    </Grid>
+    <Window.Resources>
+        <ImageBrush x:Key="PlasticBrush" ImageSource="/Assets/plastic-texture.png" Stretch="UniformToFill" Opacity="0.9" />
+    </Window.Resources>
+
+    <StackPanel MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+        <Border Background="{StaticResource PlasticBrush}" CornerRadius="40" BorderThickness="2" Padding="20" BorderBrush="Black" Height="700" Width="1200">
+            <Border Background="Black" CornerRadius="40" BorderThickness="2" BorderBrush="AliceBlue" Padding="20">
+
+                <Border CornerRadius="40">
+                    <StackPanel>
+                        <Border Style="{StaticResource sectionBorderStyle}">
+                            <Menu Background="Purple" Foreground="Yellow" FontFamily="Cooper Black" FontSize="16">
+                                <MenuItem Header="File">
+                                    <MenuItem Header="Exit" Click="Exit_Click"/>
+                                </MenuItem>
+                                <MenuItem Header="Pages">
+                                    <MenuItem Header="Home" Command="{Binding NavigateToHomePageCommand}"/>
+                                    <MenuItem Header="Directors" Command="{Binding NavigateToDirectorsPageCommand}"/>
+                                    <MenuItem Header="Genres" Command="{Binding NavigateToGenresPageCommand}"/>
+                                    <MenuItem Header="Titles" Command="{Binding NavigateToTitlesPageCommand}"/>
+                                </MenuItem>
+
+                            </Menu>
+                        </Border>
+
+                        <Border Style="{StaticResource BorderWithTextureBackgroundStyle}">
+                            <Grid>
+                                <StackPanel Height="100" Orientation="Horizontal">
+                                    <Image Source="{StaticResource MovieIcon}" Style="{StaticResource logoImageStyle}" />
+                                    <TextBlock Text="IMDB Explorer" VerticalAlignment="Center" FontFamily="Britannic Bold" FontSize="48" Foreground="Yellow" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="1">
+                                <ContentControl Content="{Binding CurrentViewModel}" />
+                            </ScrollViewer>
+
+                            <Border Style="{StaticResource sectionBorderStyle}">
+                                <ToolBarTray Background="Transparent" Orientation="Vertical" Height="auto" Grid.Column="0" Margin="0,0,-3,0">
+                                    <ToolBar Background="Transparent" Height="330" Width="90" VerticalAlignment="Center">
+
+                                        <Button Command="{Binding NavigateToHomePageCommand}" Style="{StaticResource ImageButtonStyle}" ToolTip="Go to Home Page">
+                                            <TextBox Text="Home" FontSize="16" FontFamily="Britannic Bold" Foreground="Black" Background="Transparent" IsHitTestVisible="False" />
+                                        </Button>
+
+                                        <Button Command="{Binding NavigateToTitlesPageCommand}" Style="{StaticResource ImageButtonStyle}" ToolTip="Check out the Movies Directory">
+                                            <TextBox Text="Movies" FontSize="16" FontFamily="Britannic Bold" Foreground="Black" Background="Transparent" IsHitTestVisible="False" />
+                                        </Button>
+
+                                        <Button Command="{Binding NavigateToDirectorsPageCommand}" Style="{StaticResource ImageButtonStyle}" ToolTip="Search for your favourite Director">
+                                            <TextBox Text="Directors" FontSize="16" FontFamily="Britannic Bold" Foreground="Black" Background="Transparent" IsHitTestVisible="False" />
+                                        </Button>
+
+                                        <Button Command="{Binding NavigateToGenresPageCommand}" Style="{StaticResource ImageButtonStyle}" ToolTip="See a comprehensive list of film genres">
+                                            <TextBox Text="Genres" FontSize="16" FontFamily="Britannic Bold" Foreground="Black" Background="Transparent" IsHitTestVisible="False" />
+                                        </Button>
+
+
+
+
+                                    </ToolBar>
+                                </ToolBarTray>
+                            </Border>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="1">
+                                <ContentControl Content="{Binding CurrentViewModel}" Height="442" Width="1008" />
+                            </ScrollViewer>
+                        </Grid>
+
+                    </StackPanel>
+
+                </Border>
+            </Border>
+        </Border>
+
+    </StackPanel>
 </Window>
