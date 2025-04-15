@@ -60,9 +60,24 @@ public partial class App : Application
             var genresViewModel = ServiceProvider.GetRequiredService<GenresPageViewModel>();
             var titlesViewModel = ServiceProvider.GetRequiredService<TitlesPageViewModel>();
 
-            directorsViewModel.FilteredDirectors = new ObservableCollection<Director>(dbContext.Directors.ToList());
-            genresViewModel.Genres = new ObservableCollection<Genre>(dbContext.Genres.ToList());
-            titlesViewModel.Titles = new ObservableCollection<Title>(dbContext.Titles.ToList());
+            // Fix for CS0200: Use the existing ObservableCollection and clear/add items instead of reassigning
+            directorsViewModel.RandomDirectors.Clear();
+            foreach (var director in dbContext.Directors.ToList())
+            {
+                directorsViewModel.RandomDirectors.Add(director);
+            }
+
+            genresViewModel.Genres.Clear();
+            foreach (var genre in dbContext.Genres.ToList())
+            {
+                genresViewModel.Genres.Add(genre);
+            }
+
+            titlesViewModel.Titles.Clear();
+            foreach (var title in dbContext.Titles.ToList())
+            {
+                titlesViewModel.Titles.Add(title);
+            }
         }
     }
 }

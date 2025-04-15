@@ -1,60 +1,24 @@
-﻿using System;
+﻿using FinalProjectIMDB.Data;
+using FinalProjectIMDB.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
-using System.Windows.Input;
-using FinalProjectIMDB.Models;
-using FinalProjectIMDB.Data;
 
 namespace FinalProjectIMDB.ViewModels
 {
     public class TitlesPageViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<Title> _titles;
-        private ICollectionView _titlesView;
-
-        // Filter properties
-        private string _searchText;
-        private int? _selectedGenreId;
+        private readonly ImdbContext _context = new();
+        private string _searchTerm;
         private int? _startYearFilter;
         private int? _endYearFilter;
-        private ObservableCollection<Genre> _genres;
 
-        public TitlesPageViewModel()
-        {
-            LoadData();
-
-            ResetFiltersCommand = new RelayCommand(param => ResetFilters());
-            ApplyFiltersCommand = new RelayCommand(param => ApplyFilters());
-        }
-
-        private void LoadData()
-        {
-            // Use the database context to load data
-            using (var context = new ImdbContext())
-            {
-                // Load titles (limit to 100 for performance)
-                var titlesFromDb = context.Titles.Take(100).ToList();
-                _titles = new ObservableCollection<Title>(titlesFromDb);
-
-                // Load genres
-                var genresFromDb = context.Genres.ToList();
-                _genres = new ObservableCollection<Genre>(genresFromDb);
-
-                // Add "All Genres" option
-                var allGenre = new Genre { GenreId = 0, Name = "All Genres" };
-                _genres.Insert(0, allGenre);
-            }
-
-            _titlesView = CollectionViewSource.GetDefaultView(_titles);
-            SelectedGenreId = 0; // Default to "All Genres"
-        }
-
+        private ObservableCollection<Title> _titles;
         public ObservableCollection<Title> Titles
         {
-            get { return _titles; }
+            get => _titles;
             set
             {
                 _titles = value;
@@ -62,145 +26,98 @@ namespace FinalProjectIMDB.ViewModels
             }
         }
 
-        public ICollectionView TitlesView
+        private ObservableCollection<Title> _filteredTitles;
+        public ObservableCollection<Title> FilteredTitles
         {
-            get { return _titlesView; }
-        }
-
-        public ObservableCollection<Genre> Genres
-        {
-            get { return _genres; }
-        }
-
-        public string SearchText
-        {
-            get { return _searchText; }
+            get => _filteredTitles;
             set
             {
-                _searchText = value;
+                _filteredTitles = value;
                 OnPropertyChanged();
             }
         }
 
-        public int? SelectedGenreId
+        public string SearchTerm
         {
-            get { return _selectedGenreId; }
+            get => _searchTerm;
             set
             {
-                _selectedGenreId = value;
+                _searchTerm = value;
                 OnPropertyChanged();
+                FilterTitles();
             }
         }
 
         public int? StartYearFilter
         {
-            get { return _startYearFilter; }
+            get => _startYearFilter;
             set
             {
                 _startYearFilter = value;
                 OnPropertyChanged();
+                FilterTitles();
             }
         }
 
         public int? EndYearFilter
         {
-            get { return _endYearFilter; }
+            get => _endYearFilter;
             set
             {
                 _endYearFilter = value;
                 OnPropertyChanged();
+                FilterTitles();
             }
         }
 
-        public ICommand ResetFiltersCommand { get; }
-        public ICommand ApplyFiltersCommand { get; }
-
-        private void ResetFilters()
+        public TitlesPageViewModel()
         {
-            SearchText = null;
-            SelectedGenreId = 0;
-            StartYearFilter = null;
-            EndYearFilter = null;
-
-            _titlesView.Filter = null;
+            LoadTitles();
         }
 
-        private void ApplyFilters()
+        private void LoadTitles()
         {
-            _titlesView.Filter = item =>
+            var titles = _context.Titles
+                .AsNoTracking()
+                .OrderBy(t => t.PrimaryTitle)
+                .Take(500) // Initial load size
+                .ToList();
+
+            Titles = new ObservableCollection<Title>(titles);
+            FilteredTitles = new ObservableCollection<Title>(Titles);
+        }
+
+        private void FilterTitles()
+        {
+            var filtered = Titles.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
-                var title = item as Title;
-                bool match = true;
+                var term = SearchTerm.ToLower();
+                filtered = filtered.Where(t =>
+                    (t.PrimaryTitle != null && t.PrimaryTitle.ToLower().Contains(term)) ||
+                    (t.OriginalTitle != null && t.OriginalTitle.ToLower().Contains(term)));
+            }
 
-                // Apply text search filter
-                if (!string.IsNullOrEmpty(SearchText))
-                {
-                    match = title.PrimaryTitle.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            title.OriginalTitle.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0;
-                }
+            if (StartYearFilter.HasValue)
+            {
+                filtered = filtered.Where(t => t.StartYear >= StartYearFilter.Value);
+            }
 
-                // Apply genre filter - this is a simplification since we don't have direct genre linkage
-                // In a real implementation, you would use the proper relationship
-                if (match && SelectedGenreId > 0)
-                {
-                    // Since we don't have direct Title-Genre relationship here,
-                    // this part would need to be implemented based on your actual database schema
-                    using (var context = new ImdbContext())
-                    {
-                        // This is a placeholder - would need proper implementation
-                        match = true; // Always true for now
-                    }
-                }
+            if (EndYearFilter.HasValue)
+            {
+                filtered = filtered.Where(t =>
+                    t.EndYear <= EndYearFilter.Value ||
+                    (t.EndYear == null && t.StartYear <= EndYearFilter.Value));
+            }
 
-                // Apply year range filter
-                if (match && StartYearFilter.HasValue)
-                {
-                    match = title.StartYear >= StartYearFilter.Value;
-                }
-
-                if (match && EndYearFilter.HasValue)
-                {
-                    match = title.EndYear <= EndYearFilter.Value ||
-                            (title.EndYear == null && title.StartYear <= EndYearFilter.Value);
-                }
-
-                return match;
-            };
+            FilteredTitles = new ObservableCollection<Title>(filtered);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    // Basic implementation of ICommand for binding commands in XAML
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
-
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute(parameter);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

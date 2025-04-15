@@ -1,74 +1,49 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using FinalProjectIMDB.Models;
 using FinalProjectIMDB.Data;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using FinalProjectIMDB.Commands;
 
 namespace FinalProjectIMDB.ViewModels
 {
     public class DirectorsPageViewModel : INotifyPropertyChanged
     {
-
         private readonly ImdbContext _context = new();
-        
-        private int _totalDirectors = 0;
-
-        private ObservableCollection<Director> _directors;
-        private ObservableCollection<Director> Directors
-        {
-            get { return _directors; }
-            set
-            {
-                _directors = value;
-                OnPropertyChanged(nameof(Directors));
-            }
-        }
-
-        private ObservableCollection<Director> _filteredDirectors;
-        public ObservableCollection<Director> FilteredDirectors
-        {
-            get { return _filteredDirectors; }
-            set
-            {
-                _filteredDirectors = value;
-                OnPropertyChanged(nameof(FilteredDirectors));
-            }
-        }
 
         private ObservableCollection<Director> _randomDirectors;
         public ObservableCollection<Director> RandomDirectors
         {
-            get { return _randomDirectors; }
+            get => _randomDirectors;
             set
             {
                 _randomDirectors = value;
-                OnPropertyChanged(nameof(RandomDirectors));
+                OnPropertyChanged();
             }
         }
 
+        public ICommand RefreshCommand { get; }
+
         public DirectorsPageViewModel()
         {
+            RefreshCommand = new RelayCommand(_ => RefreshRandomDirectors());
+            LoadRandomDirectors();
+        }
+
+        private void LoadRandomDirectors()
+        {
             var allDirectors = _context.Directors.AsNoTracking().ToList();
-            Directors = new ObservableCollection<Director>(allDirectors);
-            FilteredDirectors = new ObservableCollection<Director>(Directors);
-            RandomDirectors = new ObservableCollection<Director>(Directors.OrderBy(a => Guid.NewGuid()).Take(10));
+            RandomDirectors = new ObservableCollection<Director>(
+                allDirectors.OrderBy(x => Guid.NewGuid()).Take(10));
         }
 
-        private List<Director> GetRandomDirectors(List<Director> directors, int count)
+        public void RefreshRandomDirectors()
         {
-            // Make sure we don't try to take more than available
-            count = Math.Min(count, directors.Count);
-
-            // Shuffle and take N directors
-            return directors.OrderBy(x => Guid.NewGuid()).Take(count).ToList();
-        }
-
-        public void RefreshRandomDirectors(int count = 10)
-        {
-            var randomDirectors = GetRandomDirectors(Directors.ToList(), count);
-            RandomDirectors = new ObservableCollection<Director>(randomDirectors);
+            LoadRandomDirectors();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
