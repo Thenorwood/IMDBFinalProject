@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// RelayCommand.cs
+using System;
 using System.Windows.Input;
 
 namespace FinalProjectIMDB.Commands
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
+        private readonly Action<object> _executeWithParam;
+        private readonly Action _executeWithoutParam;
         private readonly Predicate<object> _canExecute;
-        private Action searchCustomers;
 
+        // Constructor for commands with parameter
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _executeWithParam = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public RelayCommand(Action searchCustomers)
+        // Constructor for parameterless commands
+        public RelayCommand(Action execute, Func<bool> canExecute = null)
         {
-            this.searchCustomers = searchCustomers;
+            _executeWithoutParam = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute == null ? _ => true : _ => canExecute();
         }
-
-
 
         public bool CanExecute(object parameter)
         {
@@ -33,7 +31,10 @@ namespace FinalProjectIMDB.Commands
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            if (_executeWithParam != null)
+                _executeWithParam(parameter);
+            else
+                _executeWithoutParam();
         }
 
         public event EventHandler CanExecuteChanged

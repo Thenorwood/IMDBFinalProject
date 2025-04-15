@@ -46,7 +46,7 @@ public partial class App : Application
         services.AddSingleton<TitlesPageViewModel>();
 
         services.AddDbContext<ImdbContext>(options =>
-            options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=IMDB;Trusted_Connection=True;"));
+            options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=IMDB_Project;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
     }
 
 

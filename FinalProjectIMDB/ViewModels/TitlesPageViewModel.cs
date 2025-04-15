@@ -1,39 +1,96 @@
-﻿using FinalProjectIMDB.Data;
+﻿using FinalProjectIMDB.Commands;
+using FinalProjectIMDB.Data;
 using FinalProjectIMDB.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace FinalProjectIMDB.ViewModels
 {
     public class TitlesPageViewModel : INotifyPropertyChanged
     {
-        private readonly ImdbContext _context = new();
+        private readonly ImdbContext _context;
         private string _searchTerm;
-        private int? _startYearFilter;
-        private int? _endYearFilter;
+        private bool _isLoading;
+        private string _statusMessage;
 
-        private ObservableCollection<Title> _titles;
-        public ObservableCollection<Title> Titles
+        public TitlesPageViewModel()
         {
-            get => _titles;
+            _context = new ImdbContext();
+            Titles = new ObservableCollection<Title>();
+            FilteredTitles = new ObservableCollection<Title>();
+            LoadTitlesCommand = new RelayCommand(async () => await LoadTitlesAsync());
+
+            // Initial load
+            LoadTitlesCommand.Execute(null);
+        }
+
+        public ICommand LoadTitlesCommand { get; }
+        public ICommand DetailCommand { get; }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
             set
             {
-                _titles = value;
-                OnPropertyChanged();
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged();
+                }
             }
         }
+
+
+        private string _debugText;
+        public string DebugText
+        {
+            get => _debugText;
+            set
+            {
+                if (_debugText != value)
+                {
+                    _debugText = value;
+                    OnPropertyChanged();
+                    Debug.WriteLine($"DebugText updated: {value}"); // Also log to debug output
+                }
+            }
+        }
+
+
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                if (_statusMessage != value)
+                {
+                    _statusMessage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<Title> Titles { get; private set; }
 
         private ObservableCollection<Title> _filteredTitles;
         public ObservableCollection<Title> FilteredTitles
         {
             get => _filteredTitles;
-            set
+            private set
             {
-                _filteredTitles = value;
-                OnPropertyChanged();
+                if (_filteredTitles != value)
+                {
+                    _filteredTitles = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -42,82 +99,75 @@ namespace FinalProjectIMDB.ViewModels
             get => _searchTerm;
             set
             {
-                _searchTerm = value;
-                OnPropertyChanged();
-                FilterTitles();
+                if (_searchTerm != value)
+                {
+                    _searchTerm = value;
+                    OnPropertyChanged();
+                    FilterTitles();
+                }
             }
         }
 
-        public int? StartYearFilter
+        private async Task LoadTitlesAsync()
         {
-            get => _startYearFilter;
-            set
+            try
             {
-                _startYearFilter = value;
-                OnPropertyChanged();
-                FilterTitles();
-            }
-        }
+                IsLoading = true;
+                StatusMessage = "Loading titles...";
+                Debug.WriteLine("Starting to load titles from database...");
 
-        public int? EndYearFilter
-        {
-            get => _endYearFilter;
-            set
+                await Task.Run(async () =>
+                {
+                    var titlesFromDb = await _context.Titles
+                        .AsNoTracking()
+                        .OrderBy(t => t.PrimaryTitle)
+                        .ToListAsync();
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Titles = new ObservableCollection<Title>(titlesFromDb);
+                        FilterTitles(); 
+                        StatusMessage = $"Loaded {titlesFromDb.Count} titles";
+                        Debug.WriteLine($"Loaded {titlesFromDb.Count} titles");
+                    });
+                });
+            }
+            catch (Exception ex)
             {
-                _endYearFilter = value;
-                OnPropertyChanged();
-                FilterTitles();
+                Debug.WriteLine($"Error loading titles: {ex}");
+                StatusMessage = "Error loading titles";
+                MessageBox.Show($"Error loading titles: {ex.Message}",
+                    "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        public TitlesPageViewModel()
-        {
-            LoadTitles();
-        }
-
-        private void LoadTitles()
-        {
-            var titles = _context.Titles
-                .AsNoTracking()
-                .OrderBy(t => t.PrimaryTitle)
-                .Take(500) // Initial load size
-                .ToList();
-
-            Titles = new ObservableCollection<Title>(titles);
-            FilteredTitles = new ObservableCollection<Title>(Titles);
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private void FilterTitles()
         {
-            var filtered = Titles.AsEnumerable();
-
-            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            if (string.IsNullOrWhiteSpace(SearchTerm))
             {
-                var term = SearchTerm.ToLower();
-                filtered = filtered.Where(t =>
-                    (t.PrimaryTitle != null && t.PrimaryTitle.ToLower().Contains(term)) ||
-                    (t.OriginalTitle != null && t.OriginalTitle.ToLower().Contains(term)));
+                FilteredTitles = new ObservableCollection<Title>(Titles);
             }
-
-            if (StartYearFilter.HasValue)
+            else
             {
-                filtered = filtered.Where(t => t.StartYear >= StartYearFilter.Value);
+                var searchLower = SearchTerm.ToLower();
+                FilteredTitles = new ObservableCollection<Title>(
+                    Titles.Where(t =>
+                        t.PrimaryTitle?.ToLower().Contains(searchLower) == true)
+                );
             }
-
-            if (EndYearFilter.HasValue)
-            {
-                filtered = filtered.Where(t =>
-                    t.EndYear <= EndYearFilter.Value ||
-                    (t.EndYear == null && t.StartYear <= EndYearFilter.Value));
-            }
-
-            FilteredTitles = new ObservableCollection<Title>(filtered);
+            Debug.WriteLine($"Filtered titles count: {FilteredTitles.Count}");
         }
 
+       
+
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

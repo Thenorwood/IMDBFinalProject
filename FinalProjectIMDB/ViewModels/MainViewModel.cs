@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// MainViewModel.cs
 using System.ComponentModel;
 using FinalProjectIMDB.Services;
+using FinalProjectIMDB.ViewModels;
 using FinalProjectIMDB.Commands;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FinalProjectIMDB.ViewModels
@@ -15,7 +12,7 @@ namespace FinalProjectIMDB.ViewModels
         private object _currentViewModel;
         public object CurrentViewModel
         {
-            get { return _currentViewModel; }
+            get => _currentViewModel;
             set
             {
                 _currentViewModel = value;
@@ -24,22 +21,27 @@ namespace FinalProjectIMDB.ViewModels
         }
 
         private readonly INavigationService _navigationService;
+        
         public MainViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
             CurrentViewModel = new HomePageViewModel();
+
+            // Initialize commands with proper parameter handling
+            NavigateToHomePageCommand = new RelayCommand(() => _navigationService.NavigateTo<HomePageViewModel>());
+            NavigateToDirectorsPageCommand = new RelayCommand(() => _navigationService.NavigateTo<DirectorsPageViewModel>());
+            NavigateToGenresPageCommand = new RelayCommand(() => _navigationService.NavigateTo<GenresPageViewModel>());
+            NavigateToTitlesPageCommand = new RelayCommand(() => _navigationService.NavigateTo<TitlesPageViewModel>());
+            GoBackCommand = new RelayCommand(() => _navigationService.GoBack());
         }
 
-        public ICommand NavigateToHomePageCommand => new RelayCommand(_ => _navigationService.NavigateTo<HomePageViewModel>());
-        public ICommand NavigateToDirectorsPageCommand => new RelayCommand(_ => _navigationService.NavigateTo<DirectorsPageViewModel>());
-        public ICommand NavigateToGenresPageCommand => new RelayCommand(_ => _navigationService.NavigateTo<GenresPageViewModel>());
-        public ICommand NavigateToTitlesPageCommand => new RelayCommand(_ => _navigationService.NavigateTo<TitlesPageViewModel>());
+        public ICommand NavigateToHomePageCommand { get; }
+        public ICommand NavigateToDirectorsPageCommand { get; }
+        public ICommand NavigateToGenresPageCommand { get; }
+        public ICommand NavigateToTitlesPageCommand { get; }
+        public ICommand GoBackCommand { get; }
 
-        public ICommand GoBackCommand => new RelayCommand(_ => _navigationService.GoBack());
-
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

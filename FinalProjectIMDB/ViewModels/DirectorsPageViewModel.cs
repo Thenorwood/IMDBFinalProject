@@ -1,4 +1,5 @@
-﻿using System;
+﻿// DirectorsPageViewModel.cs
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace FinalProjectIMDB.ViewModels
     public class DirectorsPageViewModel : INotifyPropertyChanged
     {
         private readonly ImdbContext _context = new();
-
         private ObservableCollection<Director> _randomDirectors;
+
         public ObservableCollection<Director> RandomDirectors
         {
             get => _randomDirectors;
@@ -30,13 +31,18 @@ namespace FinalProjectIMDB.ViewModels
 
         public DirectorsPageViewModel()
         {
-            RefreshCommand = new RelayCommand(_ => RefreshRandomDirectors());
+            // Updated RelayCommand initialization
+            RefreshCommand = new RelayCommand(() => RefreshRandomDirectors());
             LoadRandomDirectors();
         }
 
         private void LoadRandomDirectors()
         {
-            var allDirectors = _context.Directors.AsNoTracking().ToList();
+            var allDirectors = _context.Directors
+                .AsNoTracking()
+                .Include(d => d.Title) 
+                .ToList();
+
             RandomDirectors = new ObservableCollection<Director>(
                 allDirectors.OrderBy(x => Guid.NewGuid()).Take(10));
         }
